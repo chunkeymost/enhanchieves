@@ -25,6 +25,8 @@
   --accepted-tint: #e2f5ec;
   --declined: #c93b3b;
   --declined-tint: #fbe6e6;
+  --finish-uat: #7c3aed;
+  --finish-uat-tint: #f3e8ff;
 
   --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
@@ -309,6 +311,7 @@ button {
 .stamp--review { color: var(--review); background: var(--review-tint); }
 .stamp--accepted { color: var(--accepted); background: var(--accepted-tint); }
 .stamp--declined { color: var(--declined); background: var(--declined-tint); }
+.stamp--finish-uat { color: var(--finish-uat); background: var(--finish-uat-tint); }
 
 /* ---------- Forms ---------- */
 .field { margin-bottom: 16px; }

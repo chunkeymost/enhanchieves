@@ -91,12 +91,13 @@ const DocsStore = (() => {
     },
     counts() {
       const docs = readAll();
-      const c = { draft: 0, review: 0, accepted: 0, declined: 0, total: docs.length };
+      const c = { draft: 0, review: 0, accepted: 0, declined: 0, finishUat: 0, total: docs.length };
       docs.forEach((d) => {
         if (d.status === "draft") c.draft++;
         else if (d.status === "review") c.review++;
         else if (d.status === "accepted") c.accepted++;
         else if (d.status === "declined") c.declined++;
+        else if (d.status === "finish-uat") c.finishUat++;
       });
       return c;
     },

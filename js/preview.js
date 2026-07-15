@@ -3,6 +3,7 @@ const STATUS_LABEL = {
   review: "On Review",
   accepted: "Accepted",
   declined: "Declined",
+  "finish-uat": "Finish UAT",
 };
 
 function renderMediaGroup(containerId, items) {

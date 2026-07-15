@@ -19,6 +19,7 @@
 .overview-card--review { border-top-color: var(--review); }
 .overview-card--accepted { border-top-color: var(--accepted); }
 .overview-card--declined { border-top-color: var(--declined); }
+.overview-card--finishUat { border-top-color: var(--finish-uat); }
 .overview-card--total { border-top-color: var(--accent); background: var(--accent-tint); }
 
 .toolbar {
