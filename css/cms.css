@@ -107,6 +107,66 @@
 
 .method-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
 
+/* ── Section Toggle ── */
+.section-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+.section-toggle .toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.section-toggle .toggle-slider {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: var(--line-strong, #ccc);
+  border-radius: 10px;
+  transition: background .2s;
+}
+.section-toggle .toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+.section-toggle .toggle-input:checked + .toggle-slider {
+  background: var(--accent, #2b7a78);
+}
+.section-toggle .toggle-input:checked + .toggle-slider::after {
+  transform: translateX(16px);
+}
+.section-toggle .toggle-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted, #888);
+  min-width: 24px;
+}
+.section-toggle .toggle-input:checked ~ .toggle-label {
+  color: var(--accent, #2b7a78);
+}
+
+/* ── Disabled Section ── */
+.form-section.section--disabled .card-head {
+  opacity: .5;
+}
+.form-section.section--disabled > :not(.card-head) {
+  opacity: .35;
+  pointer-events: none;
+}
+
 .form-actions {
   position: sticky;
   bottom: 0;

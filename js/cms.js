@@ -90,6 +90,24 @@ function bindAddButtons() {
   );
 }
 
+function bindSectionToggle(sectionId, targetIds) {
+  const section = document.getElementById(sectionId);
+  const toggle = section.querySelector(".toggle-input");
+  const label = section.querySelector(".toggle-label");
+
+  function apply(state) {
+    section.classList.toggle("section--disabled", !state);
+    label.textContent = state ? "On" : "Off";
+    targetIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.disabled = !state;
+    });
+  }
+
+  apply(toggle.checked);
+  toggle.addEventListener("change", () => apply(toggle.checked));
+}
+
 function fillBasicInfo(doc) {
   document.getElementById("project").value = doc.project || "";
   document.getElementById("module").value = doc.module || "";
@@ -100,6 +118,17 @@ function fillBasicInfo(doc) {
   document.getElementById("status").value = doc.status || "draft";
   document.getElementById("overview").value = doc.overview || "";
   document.getElementById("notes").value = doc.notes || "";
+
+  const apiToggle = document.querySelector("#sec-api .toggle-input");
+  if (apiToggle) {
+    apiToggle.checked = doc.apiEnabled !== false;
+    apiToggle.dispatchEvent(new Event("change"));
+  }
+  const notesToggle = document.querySelector("#sec-notes .toggle-input");
+  if (notesToggle) {
+    notesToggle.checked = doc.notesEnabled !== false;
+    notesToggle.dispatchEvent(new Event("change"));
+  }
 }
 
 function loadForEdit(id) {
@@ -129,6 +158,10 @@ function bindScrollSpy() {
 function bindSubmit() {
   document.getElementById("docForm").addEventListener("submit", (e) => {
     e.preventDefault();
+
+    const apiEnabled = document.querySelector("#sec-api .toggle-input").checked;
+    const notesEnabled = document.querySelector("#sec-notes .toggle-input").checked;
+
     const payload = {
       project: val("project"),
       module: val("module"),
@@ -138,10 +171,12 @@ function bindSubmit() {
       author: val("author"),
       status: val("status"),
       overview: val("overview"),
-      notes: val("notes"),
+      notes: notesEnabled ? val("notes") : "",
       screenshots: collectGroup("screenshotList"),
       flow: collectGroup("flowList"),
-      api: collectGroup("apiList"),
+      api: apiEnabled ? collectGroup("apiList") : [],
+      apiEnabled,
+      notesEnabled,
     };
 
     if (!payload.project || !payload.feature || !payload.platform) {
@@ -161,6 +196,8 @@ function val(id) {
 async function boot() {
   await DocsStore.init();
   bindAddButtons();
+  bindSectionToggle("sec-api", ["addApi"]);
+  bindSectionToggle("sec-notes", ["notes"]);
   bindSubmit();
   bindScrollSpy();
 

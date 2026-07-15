@@ -82,11 +82,25 @@ async function boot() {
   `;
 
   document.getElementById("overviewText").textContent = doc.overview || "Belum ada overview.";
-  document.getElementById("notesText").textContent = doc.notes || "Tidak ada catatan tambahan.";
+
+  const pApi = document.getElementById("p-api");
+  if (doc.apiEnabled !== false) {
+    renderApiGroup(doc.api);
+  } else {
+    pApi.style.display = "none";
+    document.querySelector('.doc-toc .step[data-n="4"]')?.remove();
+  }
+
+  const pNotes = document.getElementById("p-notes");
+  if (doc.notesEnabled !== false) {
+    document.getElementById("notesText").textContent = doc.notes || "Tidak ada catatan tambahan.";
+  } else {
+    pNotes.style.display = "none";
+    document.querySelector('.doc-toc .step[data-n="5"]')?.remove();
+  }
 
   renderMediaGroup("screenshotBlocks", doc.screenshots);
   renderMediaGroup("flowBlocks", doc.flow);
-  renderApiGroup(doc.api);
 }
 
 boot();

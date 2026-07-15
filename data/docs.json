@@ -9,6 +9,8 @@
     "author": "Alya Ramadhani",
     "status": "draft",
     "lastUpdate": "2026-07-15",
+    "apiEnabled": true,
+    "notesEnabled": true,
     "overview": "Fitur login digunakan untuk proses autentikasi pengguna menggunakan email dan password.",
     "screenshots": [
       {
@@ -42,6 +44,8 @@
     "author": "Bagas Nugroho",
     "status": "accepted",
     "lastUpdate": "2026-07-12",
+    "apiEnabled": true,
+    "notesEnabled": true,
     "overview": "Sleep Report menampilkan ringkasan kualitas tidur pengguna berdasarkan data sensor.",
     "screenshots": [
       {
@@ -75,6 +79,8 @@
     "author": "Citra Wulandari",
     "status": "review",
     "lastUpdate": "2026-07-10",
+    "apiEnabled": true,
+    "notesEnabled": true,
     "overview": "Modul untuk mengelola akun pengguna, peran, dan hak akses pada panel admin.",
     "screenshots": [
       {
