@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preview — DocsCMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/preview.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount" data-active="list"></div>
+
+  <main class="main" id="mainContent">
+    <p style="color:var(--muted);">Loading…</p>
+  </main>
+</div>
+
+<template id="pageTpl">
+  <div class="doc-actions">
+    <a class="btn btn-sm" href="dashboard.html">← Back to list</a>
+    <a class="btn btn-sm btn-primary" id="editLink" href="#">Edit Documentation</a>
+  </div>
+
+  <div class="doc-header">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <h1 id="docTitle"></h1>
+    <div class="doc-meta" id="docMeta"></div>
+  </div>
+
+  <div class="doc-layout">
+    <div>
+      <section class="doc-section" id="p-overview">
+        <div class="eyebrow">Overview</div>
+        <h2>Overview</h2>
+        <p class="body-text" id="overviewText"></p>
+      </section>
+
+      <section class="doc-section" id="p-screenshot">
+        <div class="eyebrow">Screenshot</div>
+        <h2>Screenshot</h2>
+        <div id="screenshotBlocks"></div>
+      </section>
+
+      <section class="doc-section" id="p-flow">
+        <div class="eyebrow">Flow</div>
+        <h2>Flow</h2>
+        <div id="flowBlocks"></div>
+      </section>
+
+      <section class="doc-section" id="p-api">
+        <div class="eyebrow">API Documentation</div>
+        <h2>API</h2>
+        <div id="apiBlocks"></div>
+      </section>
+
+      <section class="doc-section" id="p-notes">
+        <div class="eyebrow">Notes</div>
+        <h2>Notes</h2>
+        <p class="body-text" id="notesText"></p>
+      </section>
+    </div>
+
+    <nav class="doc-toc">
+      <div class="step" data-n="1"><a href="#p-overview">Overview</a></div>
+      <div class="step" data-n="2"><a href="#p-screenshot">Screenshot</a></div>
+      <div class="step" data-n="3"><a href="#p-flow">Flow</a></div>
+      <div class="step" data-n="4"><a href="#p-api">API</a></div>
+      <div class="step" data-n="5"><a href="#p-notes">Notes</a></div>
+    </nav>
+  </div>
+</template>
+
+<template id="mediaBlockTpl">
+  <div class="media-block">
+    <div class="media-frame">[ IMAGE ]</div>
+    <div class="media-caption"></div>
+    <div class="media-desc"></div>
+  </div>
+</template>
+
+<template id="apiBlockTpl">
+  <div class="api-block">
+    <div class="api-head">
+      <span class="api-method"></span>
+      <span class="api-endpoint"></span>
+    </div>
+    <div class="api-body">
+      <div><div class="label">Request</div><pre class="api-request"></pre></div>
+      <div><div class="label">Response</div><pre class="api-response"></pre></div>
+    </div>
+  </div>
+</template>
+
+<script src="js/storage.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/preview.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DocsCMS — Documentation CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css" />
+<style>
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--ink);
+  }
+  .boot {
+    text-align: center;
+    color: #e8e8ea;
+  }
+  .boot .mark {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--accent);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 18px; color: #fff;
+    margin-bottom: 14px;
+  }
+  .boot h1 { font-size: 18px; font-weight: 600; }
+  .boot p { color: #9498a3; font-size: 13px; margin-top: 6px; font-family: var(--font-mono); }
+</style>
+</head>
+<body>
+  <div class="boot">
+    <div class="mark">D</div>
+    <h1>DocsCMS v1</h1>
+    <p>Loading dashboard…</p>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script>
+    DocsStore.init().then(() => {
+      window.location.replace("dashboard.html");
+    });
+  </script>
+</body>
+</html>

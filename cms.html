@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Documentation — DocsCMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/cms.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount" data-active="cms"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Create Documentation</h1>
+        <p>Isi form berikut — layout dan urutan section sudah tetap.</p>
+      </div>
+      <a class="btn btn-sm" href="dashboard.html">← Back to list</a>
+    </div>
+
+    <form id="docForm" class="form-layout">
+      <nav class="form-toc">
+        <a href="#sec-basic" class="current">Basic Information</a>
+        <a href="#sec-overview">Overview</a>
+        <a href="#sec-screenshot">Screenshot Section</a>
+        <a href="#sec-flow">Flow Section</a>
+        <a href="#sec-api">API Section</a>
+        <a href="#sec-notes">Notes</a>
+      </nav>
+
+      <div>
+        <!-- Basic Information -->
+        <section class="form-section card" id="sec-basic">
+          <div class="card-head"><span class="idx">01</span><div><h2>Basic Information</h2><p>Metadata dokumentasi.</p></div></div>
+          <div class="grid-2">
+            <div class="field"><label>Project Name</label><input type="text" id="project" required placeholder="e.g. OPA Mobile" /></div>
+            <div class="field"><label>Module</label><input type="text" id="module" required placeholder="e.g. Authentication" /></div>
+            <div class="field"><label>Feature Name</label><input type="text" id="feature" required placeholder="e.g. Login Feature" /></div>
+            <div class="field"><label>Platform</label>
+              <select id="platform" required>
+                <option value="">Select platform</option>
+                <option>Mobile</option><option>Web</option><option>Backend</option>
+              </select>
+            </div>
+            <div class="field"><label>Version</label><input type="text" id="version" required placeholder="e.g. 1.0.0" /></div>
+            <div class="field"><label>Author</label><input type="text" id="author" required placeholder="e.g. Alya Ramadhani" /></div>
+            <div class="field"><label>Status</label>
+              <select id="status" required>
+                <option value="draft">Draft</option>
+                <option value="review">On Review</option>
+                <option value="accepted">Accepted</option>
+                <option value="declined">Declined</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Overview -->
+        <section class="form-section card" id="sec-overview">
+          <div class="card-head"><span class="idx">02</span><div><h2>Overview</h2><p>Penjelasan singkat fitur.</p></div></div>
+          <div class="field">
+            <textarea id="overview" placeholder='Contoh: "Fitur login digunakan untuk proses autentikasi pengguna menggunakan email dan password."'></textarea>
+          </div>
+        </section>
+
+        <!-- Screenshot -->
+        <section class="form-section card" id="sec-screenshot">
+          <div class="card-head"><span class="idx">03</span><div><h2>Screenshot Section</h2><p>Posisi gambar dibuat tetap: gambar, caption, description.</p></div></div>
+          <div id="screenshotList"></div>
+          <button type="button" class="btn btn-sm" id="addScreenshot">+ Add screenshot</button>
+        </section>
+
+        <!-- Flow -->
+        <section class="form-section card" id="sec-flow">
+          <div class="card-head"><span class="idx">04</span><div><h2>Flow Section</h2><p>Diagram alur proses, caption, description.</p></div></div>
+          <div id="flowList"></div>
+          <button type="button" class="btn btn-sm" id="addFlow">+ Add flow</button>
+        </section>
+
+        <!-- API -->
+        <section class="form-section card" id="sec-api">
+          <div class="card-head"><span class="idx">05</span><div><h2>API Section</h2><p>Method, endpoint, request &amp; response.</p></div></div>
+          <div id="apiList"></div>
+          <button type="button" class="btn btn-sm" id="addApi">+ Add endpoint</button>
+        </section>
+
+        <!-- Notes -->
+        <section class="form-section card" id="sec-notes">
+          <div class="card-head"><span class="idx">06</span><div><h2>Notes</h2><p>Catatan tambahan, limitation, atau informasi implementasi.</p></div></div>
+          <div class="field"><textarea id="notes" placeholder="Catatan tambahan…"></textarea></div>
+        </section>
+
+        <div class="form-actions">
+          <a class="btn" href="dashboard.html">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save Documentation</button>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+
+<template id="screenshotTpl">
+  <div class="repeat-item" data-group="screenshots">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="image-slot" role="button" tabindex="0">
+      <input type="file" accept="image/*" class="image-input" hidden />
+      <span class="image-placeholder">[ IMAGE ]</span>
+      <img class="image-preview" alt="" />
+    </div>
+    <div class="field" style="margin-bottom:8px;"><label>Caption</label><input type="text" class="f-caption" placeholder="Login Screen" /></div>
+    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-description" placeholder="Halaman login utama aplikasi."></textarea></div>
+  </div>
+</template>
+
+<template id="flowTpl">
+  <div class="repeat-item" data-group="flow">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="image-slot" role="button" tabindex="0">
+      <input type="file" accept="image/*" class="image-input" hidden />
+      <span class="image-placeholder">[ IMAGE ]</span>
+      <img class="image-preview" alt="" />
+    </div>
+    <div class="field" style="margin-bottom:8px;"><label>Caption</label><input type="text" class="f-caption" placeholder="Login Flow" /></div>
+    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-description" placeholder="Alur autentikasi mulai dari input credential hingga token diterima."></textarea></div>
+  </div>
+</template>
+
+<template id="apiTpl">
+  <div class="repeat-item" data-group="api">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="method-row" style="margin-bottom:10px;">
+      <div class="field" style="margin-bottom:0;"><label>Method</label>
+        <select class="f-method">
+          <option>GET</option><option selected>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0;"><label>Endpoint</label><input type="text" class="f-endpoint mono" placeholder="/api/login" /></div>
+    </div>
+    <div class="grid-2">
+      <div class="field" style="margin-bottom:0;"><label>Request</label><textarea class="f-request mono" placeholder='{ "email": "", "password": "" }'></textarea></div>
+      <div class="field" style="margin-bottom:0;"><label>Response</label><textarea class="f-response mono" placeholder='{ "token": "", "user": {} }'></textarea></div>
+    </div>
+  </div>
+</template>
+
+<script src="js/storage.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/cms.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dokumentasi System - CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/dashboard.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount" data-active="dashboard"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Ringkasan dokumentasi dan status terkini.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-sm" id="importBtn">Import JSON</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+        <button class="btn btn-sm" id="exportBtn">Export JSON</button>
+        <a class="btn btn-primary btn-sm" href="cms.html">+ Create Documentation</a>
+      </div>
+    </div>
+
+    <section class="overview-grid" id="overviewGrid"></section>
+
+    <a id="list" style="position:relative; top:-70px;"></a>
+    <div class="toolbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="searchInput" placeholder="Search dokumentasi…" />
+      </div>
+      <select id="statusFilter">
+        <option value="">All status</option>
+        <option value="draft">Draft</option>
+        <option value="review">On Review</option>
+        <option value="accepted">Accepted</option>
+        <option value="declined">Declined</option>
+      </select>
+      <select id="platformFilter">
+        <option value="">All platform</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Web">Web</option>
+        <option value="Backend">Backend</option>
+      </select>
+      <div class="spacer"></div>
+      <span id="resultCount" style="font-size:12px; color:var(--muted);"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Judul</th>
+            <th>Project</th>
+            <th>Platform</th>
+            <th>Versi</th>
+            <th>Status</th>
+            <th class="sortable" id="sortDate">Last Update <span class="arrow">↓</span></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" hidden>
+        Belum ada dokumentasi yang cocok. Coba ubah pencarian atau filter,
+        atau <a href="cms.html">buat dokumentasi baru</a>.
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
