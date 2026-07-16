@@ -107,7 +107,8 @@
               <span class="toggle-label">On</span>
             </label>
           </div>
-          <div class="field"><textarea id="notes" placeholder="Catatan tambahan…"></textarea></div>
+          <div id="notesList"></div>
+          <button type="button" class="btn btn-sm" id="addNote">+ Add point</button>
         </section>
 
         <!-- Updates -->
@@ -180,6 +181,15 @@
     </div>
     <div class="field" style="margin-bottom:8px;"><label>Date</label><input type="date" class="f-date" /></div>
     <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-update-desc" placeholder="Deskripsi perubahan…"></textarea></div>
+  </div>
+</template>
+
+<template id="notesTpl">
+  <div class="repeat-item" data-group="notes">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="field" style="margin-bottom:0;">
+      <input type="text" class="f-note-point" placeholder="Tulis catatan…" />
+    </div>
   </div>
 </template>
 

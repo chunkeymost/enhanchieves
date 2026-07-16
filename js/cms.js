@@ -46,6 +46,7 @@ function addRepeatItem(groupKey, tplId, listId, data) {
       if (el.classList.contains("f-response")) el.value = data.response || "";
       if (el.classList.contains("f-date")) el.value = data.date || "";
       if (el.classList.contains("f-update-desc")) el.value = data.description || "";
+      if (el.classList.contains("f-note-point")) el.value = data.text || data || "";
     });
     if (data.image) {
       const slot = node.querySelector(".image-slot");
@@ -63,6 +64,9 @@ function addRepeatItem(groupKey, tplId, listId, data) {
 function collectGroup(listId) {
   const items = [...document.getElementById(listId).children];
   return items.map((el) => {
+    const notePoint = el.querySelector(".f-note-point");
+    if (notePoint) return notePoint.value.trim();
+
     const dateField = el.querySelector(".f-date");
     if (dateField) {
       const slot = el.querySelector(".image-slot");
@@ -103,6 +107,9 @@ function bindAddButtons() {
   document.getElementById("addUpdates").addEventListener("click", () =>
     addRepeatItem("updates", "updatesTpl", "updatesList")
   );
+  document.getElementById("addNote").addEventListener("click", () =>
+    addRepeatItem("notes", "notesTpl", "notesList")
+  );
 }
 
 function bindSectionToggle(sectionId, targetIds) {
@@ -132,7 +139,6 @@ function fillBasicInfo(doc) {
   document.getElementById("author").value = doc.author || "";
   document.getElementById("status").value = doc.status || "draft";
   document.getElementById("overview").value = doc.overview || "";
-  document.getElementById("notes").value = doc.notes || "";
 
   const apiToggle = document.querySelector("#sec-api .toggle-input");
   if (apiToggle) {
@@ -157,6 +163,7 @@ function loadForEdit(id) {
   (doc.flow || []).forEach((f) => addRepeatItem("flow", "flowTpl", "flowList", f));
   (doc.api || []).forEach((a) => addRepeatItem("api", "apiTpl", "apiList", a));
   (doc.updates || []).forEach((u) => addRepeatItem("updates", "updatesTpl", "updatesList", u));
+  (doc.notes || []).forEach((n) => addRepeatItem("notes", "notesTpl", "notesList", n));
 }
 
 function bindScrollSpy() {
@@ -187,7 +194,7 @@ function bindSubmit() {
       author: val("author"),
       status: val("status"),
       overview: val("overview"),
-      notes: notesEnabled ? val("notes") : "",
+      notes: notesEnabled ? collectGroup("notesList").filter(Boolean) : [],
       screenshots: collectGroup("screenshotList"),
       flow: collectGroup("flowList"),
       api: apiEnabled ? collectGroup("apiList") : [],
@@ -214,7 +221,7 @@ async function boot() {
   await DocsStore.init();
   bindAddButtons();
   bindSectionToggle("sec-api", ["addApi"]);
-  bindSectionToggle("sec-notes", ["notes"]);
+  bindSectionToggle("sec-notes", ["addNote"]);
   bindSubmit();
   bindScrollSpy();
 
@@ -229,6 +236,7 @@ async function boot() {
     addRepeatItem("flow", "flowTpl", "flowList");
     addRepeatItem("api", "apiTpl", "apiList");
     addRepeatItem("updates", "updatesTpl", "updatesList");
+    addRepeatItem("notes", "notesTpl", "notesList");
   }
 }
 

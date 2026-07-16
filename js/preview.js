@@ -116,7 +116,13 @@ async function boot() {
 
   const pNotes = document.getElementById("p-notes");
   if (doc.notesEnabled !== false) {
-    document.getElementById("notesText").textContent = doc.notes || "Tidak ada catatan tambahan.";
+    const notes = doc.notes || [];
+    const el = document.getElementById("notesText");
+    if (notes.length === 0) {
+      el.textContent = "Tidak ada catatan tambahan.";
+    } else {
+      el.innerHTML = "<ol style='margin:0;padding-left:20px'><li>" + notes.join("</li><li>") + "</li></ol>";
+    }
   } else {
     pNotes.style.display = "none";
     document.querySelector('.doc-toc .step[data-n="5"]')?.remove();

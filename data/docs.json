@@ -33,7 +33,7 @@
       }
     ],
     "updates": [],
-    "notes": "Token disimpan menggunakan secure storage pada sisi client."
+    "notes": ["Token disimpan menggunakan secure storage pada sisi client."]
   },
   {
     "id": "DOC-002",
@@ -69,7 +69,7 @@
       }
     ],
     "updates": [],
-    "notes": "Data disinkronkan setiap 6 jam sekali."
+    "notes": ["Data disinkronkan setiap 6 jam sekali."]
   },
   {
     "id": "DOC-003",
@@ -105,6 +105,6 @@
       }
     ],
     "updates": [],
-    "notes": "Hanya Super Admin yang dapat mengubah peran pengguna lain."
+    "notes": ["Hanya Super Admin yang dapat mengubah peran pengguna lain."]
   }
 ]
