@@ -48,6 +48,29 @@ function renderApiGroup(items) {
   });
 }
 
+function renderUpdatesGroup(items) {
+  const tpl = document.getElementById("updateBlockTpl");
+  const container = document.getElementById("updatesBlocks");
+  if (!items || items.length === 0) {
+    container.innerHTML = `<p class="body-text" style="color:var(--muted);">Belum ada update.</p>`;
+    return;
+  }
+  items.forEach((item) => {
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    node.querySelector(".update-date").textContent = formatDate(item.date) || "-";
+    node.querySelector(".media-desc").textContent = item.description || "";
+    const frame = node.querySelector(".media-frame");
+    if (item.image) {
+      frame.style.backgroundImage = `url(${item.image})`;
+      frame.style.backgroundSize = "contain";
+      frame.style.backgroundPosition = "center";
+      frame.style.backgroundRepeat = "no-repeat";
+      frame.textContent = "";
+    }
+    container.appendChild(node);
+  });
+}
+
 function formatDate(iso) {
   if (!iso) return "-";
   return new Date(iso).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
@@ -101,6 +124,7 @@ async function boot() {
 
   renderMediaGroup("screenshotBlocks", doc.screenshots);
   renderMediaGroup("flowBlocks", doc.flow);
+  renderUpdatesGroup(doc.updates);
 }
 
 boot();

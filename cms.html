@@ -32,6 +32,7 @@
         <a href="#sec-flow">Flow Section</a>
         <a href="#sec-api">API Section</a>
         <a href="#sec-notes">Notes</a>
+        <a href="#sec-updates">Updates</a>
       </nav>
 
       <div>
@@ -109,6 +110,13 @@
           <div class="field"><textarea id="notes" placeholder="Catatan tambahan…"></textarea></div>
         </section>
 
+        <!-- Updates -->
+        <section class="form-section card" id="sec-updates">
+          <div class="card-head"><span class="idx">07</span><div><h2>Updates</h2><p>Riwayat perubahan fitur.</p></div></div>
+          <div id="updatesList"></div>
+          <button type="button" class="btn btn-sm" id="addUpdates">+ Add update</button>
+        </section>
+
         <div class="form-actions">
           <a class="btn" href="dashboard.html">Cancel</a>
           <button type="submit" class="btn btn-primary">Save Documentation</button>
@@ -159,6 +167,19 @@
       <div class="field" style="margin-bottom:0;"><label>Request</label><textarea class="f-request mono" placeholder='{ "email": "", "password": "" }'></textarea></div>
       <div class="field" style="margin-bottom:0;"><label>Response</label><textarea class="f-response mono" placeholder='{ "token": "", "user": {} }'></textarea></div>
     </div>
+  </div>
+</template>
+
+<template id="updatesTpl">
+  <div class="repeat-item" data-group="updates">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="image-slot" role="button" tabindex="0">
+      <input type="file" accept="image/*" class="image-input" hidden />
+      <span class="image-placeholder">[ IMAGE ]</span>
+      <img class="image-preview" alt="" />
+    </div>
+    <div class="field" style="margin-bottom:8px;"><label>Date</label><input type="date" class="f-date" /></div>
+    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-update-desc" placeholder="Deskripsi perubahan…"></textarea></div>
   </div>
 </template>
 

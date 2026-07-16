@@ -33,7 +33,8 @@ function addRepeatItem(groupKey, tplId, listId, data) {
   const node = tpl.content.firstElementChild.cloneNode(true);
   const list = document.getElementById(listId);
 
-  setupImageUpload(node.querySelector(".image-slot"));
+  const imageSlot = node.querySelector(".image-slot");
+  if (imageSlot) setupImageUpload(imageSlot);
 
   if (data) {
     node.querySelectorAll("[class]").forEach((el) => {
@@ -43,6 +44,8 @@ function addRepeatItem(groupKey, tplId, listId, data) {
       if (el.classList.contains("f-endpoint")) el.value = data.endpoint || "";
       if (el.classList.contains("f-request")) el.value = data.request || "";
       if (el.classList.contains("f-response")) el.value = data.response || "";
+      if (el.classList.contains("f-date")) el.value = data.date || "";
+      if (el.classList.contains("f-update-desc")) el.value = data.description || "";
     });
     if (data.image) {
       const slot = node.querySelector(".image-slot");
@@ -60,6 +63,15 @@ function addRepeatItem(groupKey, tplId, listId, data) {
 function collectGroup(listId) {
   const items = [...document.getElementById(listId).children];
   return items.map((el) => {
+    const dateField = el.querySelector(".f-date");
+    if (dateField) {
+      const slot = el.querySelector(".image-slot");
+      return {
+        date: dateField.value.trim(),
+        description: el.querySelector(".f-update-desc").value.trim(),
+        image: slot ? slot.dataset.image || "" : "",
+      };
+    }
     const caption = el.querySelector(".f-caption");
     if (caption) {
       const slot = el.querySelector(".image-slot");
@@ -87,6 +99,9 @@ function bindAddButtons() {
   );
   document.getElementById("addApi").addEventListener("click", () =>
     addRepeatItem("api", "apiTpl", "apiList")
+  );
+  document.getElementById("addUpdates").addEventListener("click", () =>
+    addRepeatItem("updates", "updatesTpl", "updatesList")
   );
 }
 
@@ -141,6 +156,7 @@ function loadForEdit(id) {
   (doc.screenshots || []).forEach((s) => addRepeatItem("screenshots", "screenshotTpl", "screenshotList", s));
   (doc.flow || []).forEach((f) => addRepeatItem("flow", "flowTpl", "flowList", f));
   (doc.api || []).forEach((a) => addRepeatItem("api", "apiTpl", "apiList", a));
+  (doc.updates || []).forEach((u) => addRepeatItem("updates", "updatesTpl", "updatesList", u));
 }
 
 function bindScrollSpy() {
@@ -175,6 +191,7 @@ function bindSubmit() {
       screenshots: collectGroup("screenshotList"),
       flow: collectGroup("flowList"),
       api: apiEnabled ? collectGroup("apiList") : [],
+      updates: collectGroup("updatesList"),
       apiEnabled,
       notesEnabled,
     };
@@ -211,6 +228,7 @@ async function boot() {
     addRepeatItem("screenshots", "screenshotTpl", "screenshotList");
     addRepeatItem("flow", "flowTpl", "flowList");
     addRepeatItem("api", "apiTpl", "apiList");
+    addRepeatItem("updates", "updatesTpl", "updatesList");
   }
 }
 

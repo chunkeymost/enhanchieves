@@ -63,6 +63,12 @@
         <h2>Notes</h2>
         <p class="body-text" id="notesText"></p>
       </section>
+
+      <section class="doc-section" id="p-updates">
+        <div class="eyebrow">Updates</div>
+        <h2>Updates</h2>
+        <div id="updatesBlocks"></div>
+      </section>
     </div>
 
     <nav class="doc-toc">
@@ -71,6 +77,7 @@
       <div class="step" data-n="3"><a href="#p-flow">Flow</a></div>
       <div class="step" data-n="4"><a href="#p-api">API</a></div>
       <div class="step" data-n="5"><a href="#p-notes">Notes</a></div>
+      <div class="step" data-n="6"><a href="#p-updates">Updates</a></div>
     </nav>
   </div>
 </template>
@@ -93,6 +100,14 @@
       <div><div class="label">Request</div><pre class="api-request"></pre></div>
       <div><div class="label">Response</div><pre class="api-response"></pre></div>
     </div>
+  </div>
+</template>
+
+<template id="updateBlockTpl">
+  <div class="media-block">
+    <div class="media-frame">[ IMAGE ]</div>
+    <div class="update-date"></div>
+    <div class="media-desc"></div>
   </div>
 </template>
 

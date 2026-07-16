@@ -32,6 +32,7 @@
         "response": "{\n  \"token\": \"\",\n  \"user\": {}\n}"
       }
     ],
+    "updates": [],
     "notes": "Token disimpan menggunakan secure storage pada sisi client."
   },
   {
@@ -67,6 +68,7 @@
         "response": "{\n  \"duration\": 0,\n  \"quality\": \"\"\n}"
       }
     ],
+    "updates": [],
     "notes": "Data disinkronkan setiap 6 jam sekali."
   },
   {
@@ -102,6 +104,7 @@
         "response": "{\n  \"success\": true\n}"
       }
     ],
+    "updates": [],
     "notes": "Hanya Super Admin yang dapat mengubah peran pengguna lain."
   }
 ]

@@ -71,6 +71,7 @@ const DocsStore = (() => {
         screenshots: [],
         flow: [],
         api: [],
+        updates: [],
         ...doc,
       };
       docs.unshift(record);
