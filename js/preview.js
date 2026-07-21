@@ -130,7 +130,14 @@ async function boot() {
 
   renderMediaGroup("screenshotBlocks", doc.screenshots);
   renderMediaGroup("flowBlocks", doc.flow);
-  renderUpdatesGroup(doc.updates);
+
+  const pUpdates = document.getElementById("p-updates");
+  if (doc.updatesEnabled !== false) {
+    renderUpdatesGroup(doc.updates);
+  } else {
+    pUpdates.style.display = "none";
+    document.querySelector('.doc-toc .step[data-n="6"]')?.remove();
+  }
 }
 
 boot();

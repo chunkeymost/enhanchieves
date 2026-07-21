@@ -71,6 +71,7 @@ const DocsStore = (() => {
         screenshots: [],
         flow: [],
         api: [],
+        updatesEnabled: true,
         updates: [],
         ...doc,
       };

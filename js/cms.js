@@ -150,6 +150,11 @@ function fillBasicInfo(doc) {
     notesToggle.checked = doc.notesEnabled !== false;
     notesToggle.dispatchEvent(new Event("change"));
   }
+  const updatesToggle = document.querySelector("#sec-updates .toggle-input");
+  if (updatesToggle) {
+    updatesToggle.checked = doc.updatesEnabled !== false;
+    updatesToggle.dispatchEvent(new Event("change"));
+  }
 }
 
 function loadForEdit(id) {
@@ -184,6 +189,7 @@ function bindSubmit() {
 
     const apiEnabled = document.querySelector("#sec-api .toggle-input").checked;
     const notesEnabled = document.querySelector("#sec-notes .toggle-input").checked;
+    const updatesEnabled = document.querySelector("#sec-updates .toggle-input").checked;
 
     const payload = {
       project: val("project"),
@@ -198,9 +204,10 @@ function bindSubmit() {
       screenshots: collectGroup("screenshotList"),
       flow: collectGroup("flowList"),
       api: apiEnabled ? collectGroup("apiList") : [],
-      updates: collectGroup("updatesList"),
+      updates: updatesEnabled ? collectGroup("updatesList") : [],
       apiEnabled,
       notesEnabled,
+      updatesEnabled,
     };
 
     if (!payload.project || !payload.feature || !payload.platform) {
@@ -222,6 +229,7 @@ async function boot() {
   bindAddButtons();
   bindSectionToggle("sec-api", ["addApi"]);
   bindSectionToggle("sec-notes", ["addNote"]);
+  bindSectionToggle("sec-updates", ["addUpdates"]);
   bindSubmit();
   bindScrollSpy();
 
