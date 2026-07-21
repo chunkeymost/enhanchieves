@@ -108,6 +108,11 @@ button {
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
+  cursor: pointer;
+}
+.sidebar__brand .mark i {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .sidebar__brand .name {
@@ -194,31 +199,6 @@ button {
 }
 .sidebar--collapsed .sidebar__footer .storage-label {
   display: none;
-}
-
-/* ---------- Sidebar toggle ---------- */
-.sidebar__toggle {
-  background: none;
-  border: none;
-  color: #6b6e78;
-  cursor: pointer;
-  padding: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: color 0.12s, background 0.12s;
-  margin-bottom: 10px;
-  margin-top: -5px;
-}
-.sidebar__toggle:hover {
-  color: #fff;
-  background: #1f222a;
-}
-.sidebar__toggle svg {
-  width: 16px;
-  height: 16px;
-  display: block;
 }
 
 .main {

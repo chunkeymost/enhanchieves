@@ -22,17 +22,12 @@ function renderSidebar(active) {
     })
     .join("");
 
-  const chevronD = collapsed ? "M15 18l-6-6 6-6" : "M9 18l6-6-6-6";
-
   return `
     <aside class="sidebar${collapsed ? " sidebar--collapsed" : ""}">
       <div class="sidebar__brand">
-        <span class="mark">*</span>
+        <span class="mark" role="button" aria-label="${collapsed ? "Expand sidebar" : "Collapse sidebar"}">${collapsed ? '<i class="bi bi-list"></i>' : '<i class="bi bi-arrow-left-short"></i>'}</span>
         <span class="name">Dokumentasi System</span>
       </div>
-      <button class="sidebar__toggle" aria-label="${collapsed ? "Expand" : "Collapse"} sidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${chevronD}"/></svg>
-      </button>
       <nav>${nav}</nav>
       <div class="sidebar__footer">
         v1.0
@@ -45,17 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!mount) return;
   mount.outerHTML = renderSidebar(mount.dataset.active);
 
-  const toggle = document.querySelector(".sidebar__toggle");
-  if (!toggle) return;
+  const mark = document.querySelector(".sidebar__brand .mark");
+  if (!mark) return;
 
-  toggle.addEventListener("click", () => {
+  mark.addEventListener("click", () => {
     const sidebar = document.querySelector(".sidebar");
     const isCollapsed = sidebar.classList.toggle("sidebar--collapsed");
     localStorage.setItem(LS_KEY, isCollapsed);
 
-    toggle.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
-    const path = toggle.querySelector("path");
-    path.setAttribute("d", isCollapsed ? "M15 18l-6-6 6-6" : "M9 18l6-6-6-6");
+    mark.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
+    mark.innerHTML = isCollapsed ? '<i class="bi bi-list"></i>' : '<i class="bi bi-arrow-left-short"></i>';
 
     const links = sidebar.querySelectorAll("nav a");
     links.forEach((a) => {
