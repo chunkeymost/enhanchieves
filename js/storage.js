@@ -60,6 +60,10 @@ const DocsStore = (() => {
     getAll() {
       return readAll();
     },
+    getProjects() {
+      const docs = readAll();
+      return [...new Set(docs.map((d) => d.project).filter(Boolean))].sort();
+    },
     getById(id) {
       return readAll().find((d) => d.id === id) || null;
     },
@@ -104,16 +108,41 @@ const DocsStore = (() => {
       });
       return c;
     },
-    exportJSON() {
-      const blob = new Blob([JSON.stringify(readAll(), null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "docs.json";
-      a.click();
-      URL.revokeObjectURL(url);
+    async exportJSON() {
+      const data = JSON.stringify(readAll(), null, 2);
+      try {
+        const res = await fetch("/api/backup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: data,
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        showToast("Backup data berhasil tersimpan di folder data/", "success");
+      } catch {
+        try {
+          const blob = new Blob([data], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          const now = new Date();
+          const ts = now.getFullYear() +
+            String(now.getMonth() + 1).padStart(2, "0") +
+            String(now.getDate()).padStart(2, "0") + "-" +
+            String(now.getHours()).padStart(2, "0") +
+            String(now.getMinutes()).padStart(2, "0") +
+            String(now.getSeconds()).padStart(2, "0");
+          a.download = `docs-${ts}.json`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 200);
+          showToast("Backup data berhasil (tersimpan di Downloads)", "success");
+        } catch (e) {
+          showToast("Backup data gagal: " + e.message, "error");
+        }
+      }
     },
     async importJSON(file) {
       const text = await file.text();
@@ -126,3 +155,22 @@ const DocsStore = (() => {
     },
   };
 })();
+
+function showToast(message, type) {
+  const container =
+    document.querySelector(".toast-container") ||
+    (() => {
+      const el = document.createElement("div");
+      el.className = "toast-container";
+      document.body.appendChild(el);
+      return el;
+    })();
+  const el = document.createElement("div");
+  el.className = `toast toast--${type}`;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.add("toast--dismissing");
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}

@@ -39,7 +39,7 @@
         <section class="form-section card" id="sec-basic">
           <div class="card-head"><span class="idx">01</span><div><h2>Basic Information</h2><p>Metadata dokumentasi.</p></div></div>
           <div class="grid-2">
-            <div class="field"><label>Project Name</label><input type="text" id="project" required placeholder="e.g. OPA Mobile" /></div>
+            <div class="field combobox" id="projectGroup"><label>Project Name</label><div class="combobox-input-wrap"><input type="text" id="project" required placeholder="e.g. OPA Mobile" autocomplete="off" /><button type="button" class="combobox-toggle" tabindex="-1"><svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/></svg></button></div><ul class="combobox-menu" id="projectMenu" hidden></ul></div>
             <div class="field"><label>Module</label><input type="text" id="module" required placeholder="e.g. Authentication" /></div>
             <div class="field"><label>Feature Name</label><input type="text" id="feature" required placeholder="e.g. Login Feature" /></div>
             <div class="field"><label>Platform</label>

@@ -124,6 +124,13 @@ button {
 }
 .btn-ghost:hover { background: var(--accent-tint); border-color: transparent; }
 
+.btn-purple {
+  background: var(--finish-uat);
+  border-color: var(--finish-uat);
+  color: #fff;
+}
+.btn-purple:hover { background: #6d28d9; border-color: #6d28d9; }
+
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 
 /* ---------- Cards ---------- */
@@ -244,6 +251,39 @@ tbody tr:hover { background: #fbfaf8; }
   text-align: center;
   padding: 50px 20px;
   color: var(--muted);
+}
+
+/* ---------- Toast ---------- */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 12px 18px;
+  border-radius: var(--radius-s);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  animation: toast-in .3s ease;
+  max-width: 360px;
+}
+.toast--success { background: #16a34a; }
+.toast--error { background: #dc2626; }
+.toast--dismissing { animation: toast-out .3s ease forwards; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-40px); }
 }
 
 @media (max-width: 900px) {

@@ -220,12 +220,96 @@ function bindSubmit() {
   });
 }
 
+function initProjectCombobox() {
+  const input = document.getElementById("project");
+  const menu = document.getElementById("projectMenu");
+  const group = document.getElementById("projectGroup");
+
+  function open() {
+    const val = input.value.trim();
+    const projects = DocsStore.getProjects();
+    const filtered = val
+      ? projects.filter((p) => p.toLowerCase().includes(val.toLowerCase()))
+      : projects;
+    const exactMatch = filtered.some((p) => p.toLowerCase() === val.toLowerCase());
+
+    menu.innerHTML = "";
+    filtered.forEach((p) => {
+      const li = document.createElement("li");
+      li.dataset.value = p;
+      li.textContent = p;
+      menu.appendChild(li);
+    });
+
+    if (val && !exactMatch) {
+      const li = document.createElement("li");
+      li.className = "add-new";
+      li.dataset.value = "";
+      li.textContent = '+ Add "' + val + '"';
+      menu.appendChild(li);
+    }
+
+    menu.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  function close() {
+    menu.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+  }
+
+  function selectValue(value) {
+    input.value = value;
+    close();
+  }
+
+  input.addEventListener("focus", open);
+  input.addEventListener("input", open);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      close();
+    }
+    if (e.key === "Enter" && !menu.hidden) {
+      const highlighted = menu.querySelector(".highlighted");
+      if (highlighted) {
+        e.preventDefault();
+        selectValue(highlighted.dataset.value || input.value.trim());
+      }
+    }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const items = [...menu.querySelectorAll("li")];
+      if (!items.length) return;
+      const idx = items.findIndex((li) => li.classList.contains("highlighted"));
+      const next = e.key === "ArrowDown" ? Math.min(idx + 1, items.length - 1) : Math.max(idx - 1, 0);
+      items.forEach((li) => li.classList.remove("highlighted"));
+      items[next].classList.add("highlighted");
+    }
+  });
+
+  menu.addEventListener("click", (e) => {
+    const li = e.target.closest("li");
+    if (!li) return;
+    if (li.classList.contains("add-new")) {
+      selectValue(input.value.trim());
+    } else {
+      selectValue(li.dataset.value);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!group.contains(e.target)) close();
+  });
+}
+
 function val(id) {
   return document.getElementById(id).value.trim();
 }
 
 async function boot() {
   await DocsStore.init();
+  initProjectCombobox();
   bindAddButtons();
   bindSectionToggle("sec-api", ["addApi"]);
   bindSectionToggle("sec-notes", ["addNote"]);
