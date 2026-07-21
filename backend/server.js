@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const url = require("url");
 
 const PORT = process.env.PORT || 3000;
 const ROOT = path.resolve(__dirname, "..");
@@ -38,10 +39,11 @@ function sendJSON(res, code, data) {
 }
 
 async function serveStatic(req, res) {
-  let filePath = path.join(ROOT, req.url === "/" ? "index.html" : req.url);
+  const pathname = url.parse(req.url).pathname;
+  let filePath = path.join(ROOT, pathname === "/" ? "index.html" : pathname);
 
-  if (req.url.startsWith("/frontend/") && req.url.endsWith(".html")) {
-    filePath = path.join(ROOT, req.url);
+  if (pathname.startsWith("/frontend/") && pathname.endsWith(".html")) {
+    filePath = path.join(ROOT, pathname);
   }
 
   const ext = path.extname(filePath).toLowerCase();

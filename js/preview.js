@@ -4,6 +4,7 @@ const STATUS_LABEL = {
   accepted: "Accepted",
   declined: "Declined",
   "finish-uat": "Finish UAT",
+  done: "Done",
 };
 
 function renderMediaGroup(containerId, items) {

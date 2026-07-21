@@ -159,7 +159,14 @@ function fillBasicInfo(doc) {
 
 function loadForEdit(id) {
   const doc = DocsStore.getById(id);
-  if (!doc) return;
+  if (!doc) {
+    document.getElementById("pageTitle").textContent = "Dokumentasi Tidak Ditemukan";
+    document.querySelector('button[type="submit"]').disabled = true;
+    document.getElementById("docForm").insertAdjacentHTML("afterbegin",
+      `<div class="toast toast--error" style="margin-bottom:16px;">Dokumentasi dengan ID "${id}" tidak ditemukan. Silakan kembali ke dashboard.</div>`
+    );
+    return;
+  }
   editingId = id;
   document.getElementById("pageTitle").textContent = "Edit Documentation";
   document.querySelector('button[type="submit"]').textContent = "Update Documentation";
@@ -216,6 +223,10 @@ function bindSubmit() {
     }
 
     const saved = editingId ? DocsStore.update(editingId, payload) : DocsStore.create(payload);
+    if (!saved) {
+      alert("Gagal menyimpan dokumentasi. Dokumen dengan ID \"" + editingId + "\" tidak ditemukan.");
+      return;
+    }
     window.location.href = "preview.html?id=" + saved.id;
   });
 }
@@ -245,7 +256,7 @@ function initProjectCombobox() {
       const li = document.createElement("li");
       li.className = "add-new";
       li.dataset.value = "";
-      li.textContent = '+ Add "' + val + '"';
+      li.textContent = 'Add "' + val + '"';
       menu.appendChild(li);
     }
 
