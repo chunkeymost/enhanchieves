@@ -11,10 +11,12 @@ The architecture is intentionally designed with a future backend migration in mi
 ## Directory Structure
 
 ```
-├── index.html         # Splash / boot page — initializes store, then redirects
-├── dashboard.html     # List + overview cards + search/filter
-├── cms.html           # Create / Edit form (6 sections)
-├── preview.html       # Read-only document detail
+├── index.html         # Splash / boot page — redirects to frontend/dashboard.html
+├── favicon.svg        # bi-file-code-fill icon with dark/light mode support
+├── frontend/
+│   ├── dashboard.html # List + overview cards + search/filter
+│   ├── cms.html       # Create / Edit form (7 sections)
+│   └── preview.html   # Read-only document detail
 ├── css/
 │   ├── base.css       # Design tokens, layout, buttons, forms, tables
 │   ├── dashboard.css  # Dashboard-specific styles
@@ -22,12 +24,14 @@ The architecture is intentionally designed with a future backend migration in mi
 │   └── preview.css    # Preview page styles
 ├── js/
 │   ├── storage.js     # Data layer — localStorage CRUD, import/export
-│   ├── sidebar.js     # Shared sidebar component
 │   ├── dashboard.js   # Dashboard page logic
 │   ├── cms.js         # CMS form logic
 │   └── preview.js     # Preview page logic
-└── data/
-    └── docs.json      # Seed data (fetched once, copied to localStorage)
+├── data/
+│   └── docs.json      # Seed data (fetched once, copied to localStorage)
+└── docs/
+    ├── ARCHITECTURE.md
+    └── SKILL.md
 ```
 
 ---
@@ -35,14 +39,14 @@ The architecture is intentionally designed with a future backend migration in mi
 ## Data Flow
 
 ```
-data/docs.json ──fetch──▶ localStorage ("docscms_v1_docs") ◀── CRUD ──▶ UI
-                                │
-                        Export JSON (download)
-                        Import JSON (upload)
-                        Reset to seed
+/data/docs.json ──fetch──▶ localStorage ("docscms_v1_docs") ◀── CRUD ──▶ UI
+                                  │
+                          Export JSON (download)
+                          Import JSON (upload)
+                          Reset to seed
 ```
 
-On first visit, `DocsStore.init()` fetches `data/docs.json` and writes it to localStorage. All subsequent reads and writes hit localStorage directly. Export downloads the current state as `docs.json`; import replaces it from an uploaded file.
+On first visit, `DocsStore.init()` fetches `/data/docs.json` (absolute path from root) and writes it to localStorage. All subsequent reads and writes hit localStorage directly. Export downloads the current state as `docs.json`; import replaces it from an uploaded file.
 
 ---
 
@@ -64,16 +68,12 @@ A singleton IIFE (`DocsStore`) that all pages import via `<script>`. Exposes:
 
 **This is the only module that needs to change when migrating to V2.**
 
-### Shared Component — `sidebar.js`
-
-Renders a collapsible sidebar with navigation links. Active page is determined by `data-active` attribute in HTML. Collapsed state is persisted in localStorage.
-
 ### Page Modules
 
 | Page | Module | Responsibility |
 |---|---|---|
 | Dashboard | `dashboard.js` | Render doc list, overview cards, search/filter/sort, action buttons |
-| CMS | `cms.js` | 6-section form, validation, populate for edit mode via `?id=` |
+| CMS | `cms.js` | 7-section form, validation, populate for edit mode via `?id=` |
 | Preview | `preview.js` | Render full doc view with sidebar TOC, breadcrumb, status stamp |
 
 ---
@@ -89,13 +89,16 @@ interface Document {
   platform: "Mobile" | "Web" | "Backend";
   version: string;      // semantic version
   author: string;
-  status: "draft" | "review" | "accepted" | "declined";
+  status: "draft" | "review" | "accepted" | "declined" | "finish-uat" | "done";
   lastUpdate: string;   // ISO date (YYYY-MM-DD), auto-set
   overview: string;     // Markdown/Rich text overview
   screenshots: MediaItem[];
   flow: MediaItem[];
   api: ApiEndpoint[];
-  notes: string;
+  notes: string[];
+  updates: UpdateItem[];
+  apiEnabled: boolean;
+  notesEnabled: boolean;
 }
 
 interface MediaItem {
@@ -110,7 +113,21 @@ interface ApiEndpoint {
   request: string;      // JSON string
   response: string;     // JSON string
 }
+
+interface UpdateItem {
+  date: string;
+  description: string;
+  image?: string;
+}
 ```
+
+---
+
+## Favicon
+
+The favicon (`favicon.svg`) uses the Bootstrap Icons `bi-file-code-fill` design. It includes a `<style>` block with `@media (prefers-color-scheme: dark)` to automatically switch colours:
+- **Light mode** — dark icon (`#1e1e1e`)
+- **Dark mode** — light icon (`#e8e8ea`)
 
 ---
 

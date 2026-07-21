@@ -22,7 +22,8 @@ Kami adalah tim pengembang yang membangun **DocsCMS**, sebuah Documentation Cont
 - **Design Tokens** — Centralized `:root` variables for colors, fonts, spacing
 - **Responsive Layout** — Breakpoints at 900px and 1100px
 - **Visual Motif** — Status stamps, dark sidebar + light content area, blue accent
-- **Iconography** — Font Awesome 6 integration
+- **Iconography** — Font Awesome 6 + Bootstrap Icons
+- **Adaptive Favicon** — SVG favicon with `@media (prefers-color-scheme)` for dark/light mode
 
 ### Tools & Workflow
 - **Git** — Version control, conventional commits
@@ -37,7 +38,7 @@ Kami adalah tim pengembang yang membangun **DocsCMS**, sebuah Documentation Cont
 | Markup | HTML5 |
 | Styling | CSS3 (custom properties) |
 | Fonts | Inter (UI), JetBrains Mono (code) |
-| Icons | Font Awesome 6.7.2 |
+| Icons | Font Awesome 6.7.2, Bootstrap Icons |
 | Logic | Vanilla JS (ES6+) |
 | Storage | localStorage |
 | Seed Data | JSON |
@@ -46,7 +47,7 @@ Kami adalah tim pengembang yang membangun **DocsCMS**, sebuah Documentation Cont
 
 ## Methodologies
 
-- **Modular Architecture** — Separation of concerns: data layer (`storage.js`), shared components (`sidebar.js`), page logic
+- **Modular Architecture** — Separation of concerns: data layer (`storage.js`), page logic
 - **Migration-First Design** — V1 data layer designed to be the only file replaced when moving to V2 (Express + SQLite)
 - **Progressive Enhancement** — Core functionality works without JavaScript disabled features
 - **Mobile-First** — Responsive design scales from mobile to desktop

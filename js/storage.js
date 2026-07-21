@@ -17,7 +17,7 @@
  */
 const DocsStore = (() => {
   const LS_KEY = "docscms_v1_docs";
-  const SEED_URL = "data/docs.json";
+  const SEED_URL = "/data/docs.json";
 
   async function ensureSeeded() {
     const existing = localStorage.getItem(LS_KEY);
