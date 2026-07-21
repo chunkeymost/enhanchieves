@@ -163,6 +163,7 @@ button {
 .stamp--accepted { color: var(--accepted); background: var(--accepted-tint); }
 .stamp--declined { color: var(--declined); background: var(--declined-tint); }
 .stamp--finish-uat { color: var(--finish-uat); background: var(--finish-uat-tint); }
+.stamp--done { color: var(--accepted); background: var(--accepted-tint); }
 
 /* ---------- Forms ---------- */
 .field { margin-bottom: 16px; }
