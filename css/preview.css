@@ -81,11 +81,26 @@
   margin-bottom: 18px;
 }
 .media-frame {
+  position: relative;
   aspect-ratio: 16/8;
   border: 1px solid var(--line);
   border-radius: var(--radius-m);
-  background: repeating-linear-gradient(135deg, #f1f0ec, #f1f0ec 10px, #ebe9e3 10px, #ebe9e3 20px);
+  overflow: hidden;
   display: flex; align-items: center; justify-content: center;
+  background: var(--paper);
+}
+.media-frame img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+.media-frame img.loaded {
+  display: block;
+}
+.media-frame-placeholder {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 12px;

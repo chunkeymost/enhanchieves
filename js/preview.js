@@ -20,11 +20,11 @@ function renderMediaGroup(containerId, items) {
     node.querySelector(".media-desc").textContent = item.description || "";
     const frame = node.querySelector(".media-frame");
     if (item.image) {
-      frame.style.backgroundImage = `url(${item.image})`;
-      frame.style.backgroundSize = "contain";
-      frame.style.backgroundPosition = "center";
-      frame.style.backgroundRepeat = "no-repeat";
-      frame.textContent = "";
+      const img = node.querySelector("img");
+      img.src = item.image;
+      img.alt = item.caption || "";
+      img.classList.add("loaded");
+      node.querySelector(".media-frame-placeholder").style.display = "none";
     }
     container.appendChild(node);
   });
@@ -62,11 +62,11 @@ function renderUpdatesGroup(items) {
     node.querySelector(".media-desc").textContent = item.description || "";
     const frame = node.querySelector(".media-frame");
     if (item.image) {
-      frame.style.backgroundImage = `url(${item.image})`;
-      frame.style.backgroundSize = "contain";
-      frame.style.backgroundPosition = "center";
-      frame.style.backgroundRepeat = "no-repeat";
-      frame.textContent = "";
+      const img = node.querySelector("img");
+      img.src = item.image;
+      img.alt = item.date || "";
+      img.classList.add("loaded");
+      node.querySelector(".media-frame-placeholder").style.display = "none";
     }
     container.appendChild(node);
   });
