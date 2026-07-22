@@ -74,9 +74,13 @@
 .doc-section h2 { font-size: 18px; margin-bottom: 12px; }
 .doc-section p.body-text { color: var(--ink-soft); line-height: 1.65; }
 
-.media-block { margin-bottom: 18px; }
+.media-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
 .media-frame {
-  width: 100%;
   aspect-ratio: 16/8;
   border: 1px solid var(--line);
   border-radius: var(--radius-m);
@@ -85,10 +89,14 @@
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 12px;
-  margin-bottom: 8px;
+}
+.media-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .media-caption { font-weight: 600; font-size: 13px; }
-.media-desc { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+.media-desc { color: var(--muted); font-size: 12.5px; }
 
 .update-date {
   font-family: var(--font-mono);
