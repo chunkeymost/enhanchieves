@@ -74,6 +74,7 @@ const DocsStore = (() => {
         lastUpdate: todayISO(),
         screenshots: [],
         flow: [],
+        files: [],
         api: [],
         updatesEnabled: true,
         updates: [],

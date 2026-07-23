@@ -68,6 +68,12 @@
         <h2>Updates</h2>
         <div id="updatesBlocks"></div>
       </section>
+
+      <section class="doc-section" id="p-files">
+        <div class="eyebrow">Files</div>
+        <h2>Files</h2>
+        <div id="filesBlocks"></div>
+      </section>
     </div>
 
     <nav class="doc-toc">
@@ -77,6 +83,7 @@
       <div class="step" data-n="4"><a href="#p-api">API</a></div>
       <div class="step" data-n="5"><a href="#p-notes">Notes</a></div>
       <div class="step" data-n="6"><a href="#p-updates">Updates</a></div>
+      <div class="step" data-n="7"><a href="#p-files">Files</a></div>
     </nav>
   </div>
 </template>
@@ -90,6 +97,7 @@
     <div class="media-info">
       <div class="media-caption"></div>
       <div class="media-desc"></div>
+      <div class="media-content"></div>
     </div>
   </div>
 </template>
@@ -113,10 +121,11 @@
       <img src="" alt="" />
       <span class="media-frame-placeholder">[ IMAGE ]</span>
     </div>
-    <div class="media-info">
-      <div class="update-date"></div>
-      <div class="media-desc"></div>
-    </div>
+      <div class="media-info">
+        <div class="update-date"></div>
+        <div class="media-desc"></div>
+        <div class="media-content"></div>
+      </div>
   </div>
 </template>
 

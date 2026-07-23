@@ -29,6 +29,7 @@
         <a href="#sec-overview">Overview</a>
         <a href="#sec-screenshot">Screenshot Section</a>
         <a href="#sec-flow">Flow Section</a>
+        <a href="#sec-files">Files</a>
         <a href="#sec-api">API Section</a>
         <a href="#sec-notes">Notes</a>
         <a href="#sec-updates">Updates</a>
@@ -124,6 +125,13 @@
           <button type="button" class="btn btn-sm" id="addUpdates">+ Add update</button>
         </section>
 
+        <!-- Files -->
+        <section class="form-section card" id="sec-files">
+          <div class="card-head"><span class="idx">08</span><div><h2>Files</h2><p>PDF, Excel, Word, PPT — lampirkan file pendukung.</p></div></div>
+          <div id="filesList"></div>
+          <button type="button" class="btn btn-sm" id="addFile">+ Add file</button>
+        </section>
+
         <div class="form-actions">
           <a class="btn" href="dashboard.html">Cancel</a>
           <button type="submit" class="btn btn-primary">Save Documentation</button>
@@ -142,7 +150,8 @@
       <img class="image-preview" alt="" />
     </div>
     <div class="field" style="margin-bottom:8px;"><label>Caption</label><input type="text" class="f-caption" placeholder="Login Screen" /></div>
-    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-description" placeholder="Halaman login utama aplikasi."></textarea></div>
+    <div class="field" style="margin-bottom:8px;"><label>Description</label><textarea class="f-description" placeholder="Halaman login utama aplikasi."></textarea></div>
+    <div class="content-list"><label>Content</label><div class="content-blocks"></div><button type="button" class="btn btn-sm btn-ghost add-content">+ Add content</button></div>
   </div>
 </template>
 
@@ -155,7 +164,8 @@
       <img class="image-preview" alt="" />
     </div>
     <div class="field" style="margin-bottom:8px;"><label>Caption</label><input type="text" class="f-caption" placeholder="Login Flow" /></div>
-    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-description" placeholder="Alur autentikasi mulai dari input credential hingga token diterima."></textarea></div>
+    <div class="field" style="margin-bottom:8px;"><label>Description</label><textarea class="f-description" placeholder="Alur autentikasi mulai dari input credential hingga token diterima."></textarea></div>
+    <div class="content-list"><label>Content</label><div class="content-blocks"></div><button type="button" class="btn btn-sm btn-ghost add-content">+ Add content</button></div>
   </div>
 </template>
 
@@ -186,7 +196,8 @@
       <img class="image-preview" alt="" />
     </div>
     <div class="field" style="margin-bottom:8px;"><label>Date</label><input type="date" class="f-date" /></div>
-    <div class="field" style="margin-bottom:0;"><label>Description</label><textarea class="f-update-desc" placeholder="Deskripsi perubahan…"></textarea></div>
+    <div class="field" style="margin-bottom:8px;"><label>Description</label><textarea class="f-update-desc" placeholder="Deskripsi perubahan…"></textarea></div>
+    <div class="content-list"><label>Content</label><div class="content-blocks"></div><button type="button" class="btn btn-sm btn-ghost add-content">+ Add content</button></div>
   </div>
 </template>
 
@@ -195,6 +206,50 @@
     <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
     <div class="field" style="margin-bottom:0;">
       <input type="text" class="f-note-point" placeholder="Tulis catatan…" />
+    </div>
+  </div>
+</template>
+
+<template id="contentBlockTpl">
+  <div class="content-block">
+    <select class="f-content-type">
+      <option value="text">Text</option>
+      <option value="h1">Heading 1</option>
+      <option value="h2">Heading 2</option>
+      <option value="h3">Heading 3</option>
+      <option value="bullet">Bullet</option>
+      <option value="checklist">Checklist</option>
+      <option value="note">Note</option>
+      <option value="link">Link</option>
+    </select>
+    <div class="content-block-fields">
+      <input type="text" class="f-content-text" placeholder="Content…" />
+      <div class="content-block-extra" style="display:none">
+        <input type="url" class="f-content-url" placeholder="https://…" />
+        <label class="content-checked-wrap" style="display:none">
+          <input type="checkbox" class="f-content-checked" />
+          Checked
+        </label>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-ghost remove-content">✕</button>
+  </div>
+</template>
+
+<template id="filesTpl">
+  <div class="repeat-item files-item" data-group="files">
+    <button type="button" class="btn btn-sm btn-ghost remove-item">✕</button>
+    <div class="file-slot">
+      <input type="file" accept=".pdf,.xlsx,.xls,.doc,.docx,.ppt,.pptx" class="file-input" hidden />
+      <div class="file-ui">
+        <span class="file-icon"><i class="bi bi-file-earmark"></i></span>
+        <span class="file-name-placeholder">Click or drop file here</span>
+      </div>
+      <div class="file-meta" style="display:none">
+        <span class="file-icon"><i class="bi bi-file-earmark"></i></span>
+        <span class="file-name"></span>
+        <button type="button" class="btn btn-sm btn-ghost file-change">Change</button>
+      </div>
     </div>
   </div>
 </template>
