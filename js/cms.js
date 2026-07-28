@@ -28,6 +28,111 @@ function setupImageUpload(slot) {
   });
 }
 
+function setupFileUpload(slot) {
+  const input = slot.querySelector(".file-input");
+  const ui = slot.querySelector(".file-ui");
+  const meta = slot.querySelector(".file-meta");
+  const nameEl = slot.querySelector(".file-name");
+
+  function loadFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      slot.dataset.fileName = file.name;
+      slot.dataset.fileData = e.target.result;
+      ui.style.display = "none";
+      meta.style.display = "flex";
+      nameEl.textContent = file.name;
+      const icon = meta.querySelector(".file-icon i");
+      const ext = file.name.split(".").pop().toLowerCase();
+      if (["pdf"].includes(ext)) icon.className = "bi bi-file-earmark-pdf";
+      else if (["xlsx", "xls"].includes(ext)) icon.className = "bi bi-file-earmark-spreadsheet";
+      else if (["doc", "docx"].includes(ext)) icon.className = "bi bi-file-earmark-word";
+      else if (["ppt", "pptx"].includes(ext)) icon.className = "bi bi-file-earmark-slides";
+      else icon.className = "bi bi-file-earmark";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  slot.addEventListener("click", (e) => {
+    if (e.target.closest(".file-change")) {
+      input.value = "";
+      input.click();
+      return;
+    }
+    if (!slot.dataset.fileData) input.click();
+  });
+  input.addEventListener("change", () => loadFile(input.files[0]));
+
+  slot.addEventListener("dragover", (e) => { e.preventDefault(); slot.classList.add("drag-over"); });
+  slot.addEventListener("dragleave", () => slot.classList.remove("drag-over"));
+  slot.addEventListener("drop", (e) => {
+    e.preventDefault();
+    slot.classList.remove("drag-over");
+    loadFile(e.dataTransfer.files[0]);
+  });
+}
+
+function collectFilesGroup() {
+  const items = [...document.getElementById("filesList").children];
+  return items.map((el) => {
+    const slot = el.querySelector(".file-slot");
+    if (!slot || !slot.dataset.fileData) return null;
+    return {
+      name: slot.dataset.fileName,
+      data: slot.dataset.fileData,
+    };
+  }).filter(Boolean);
+}
+
+function addContentBlock(container, data) {
+  const tpl = document.getElementById("contentBlockTpl");
+  const node = tpl.content.firstElementChild.cloneNode(true);
+
+  const typeSelect = node.querySelector(".f-content-type");
+  const textInput = node.querySelector(".f-content-text");
+  const extra = node.querySelector(".content-block-extra");
+  const urlInput = node.querySelector(".f-content-url");
+  const checkedWrap = node.querySelector(".content-checked-wrap");
+  const checkedInput = node.querySelector(".f-content-checked");
+
+  function toggleExtra() {
+    const t = typeSelect.value;
+    extra.style.display = t === "link" || t === "checklist" ? "flex" : "none";
+    urlInput.style.display = t === "link" ? "" : "none";
+    checkedWrap.style.display = t === "checklist" ? "inline-flex" : "none";
+    if (t !== "link") urlInput.value = "";
+    if (t !== "checklist") checkedInput.checked = false;
+  }
+
+  typeSelect.addEventListener("change", toggleExtra);
+
+  if (data) {
+    typeSelect.value = data.type || "text";
+    textInput.value = data.text || "";
+    if (data.type === "link") urlInput.value = data.url || "";
+    if (data.type === "checklist") checkedInput.checked = !!data.checked;
+  }
+
+  toggleExtra();
+
+  node.querySelector(".remove-content").addEventListener("click", () => node.remove());
+  container.appendChild(node);
+}
+
+function collectContentBlocks(el) {
+  const blocks = el.querySelectorAll(".content-block");
+  return [...blocks].map((block) => {
+    const type = block.querySelector(".f-content-type").value;
+    const text = block.querySelector(".f-content-text").value.trim();
+    if (!text) return null;
+    const item = { type, text };
+    if (type === "link") item.url = block.querySelector(".f-content-url").value.trim();
+    if (type === "checklist") item.checked = block.querySelector(".f-content-checked").checked;
+    return item;
+  }).filter(Boolean);
+}
+
 function addRepeatItem(groupKey, tplId, listId, data) {
   const tpl = document.getElementById(tplId);
   const node = tpl.content.firstElementChild.cloneNode(true);
@@ -35,6 +140,9 @@ function addRepeatItem(groupKey, tplId, listId, data) {
 
   const imageSlot = node.querySelector(".image-slot");
   if (imageSlot) setupImageUpload(imageSlot);
+
+  const fileSlot = node.querySelector(".file-slot");
+  if (fileSlot) setupFileUpload(fileSlot);
 
   if (data) {
     node.querySelectorAll("[class]").forEach((el) => {
@@ -55,6 +163,32 @@ function addRepeatItem(groupKey, tplId, listId, data) {
       slot.classList.add("has-image");
       slot.dataset.image = data.image;
     }
+    if (fileSlot && data.name && data.data) {
+      fileSlot.dataset.fileName = data.name;
+      fileSlot.dataset.fileData = data.data;
+      const ui = fileSlot.querySelector(".file-ui");
+      const meta = fileSlot.querySelector(".file-meta");
+      const nameEl = fileSlot.querySelector(".file-name");
+      ui.style.display = "none";
+      meta.style.display = "flex";
+      nameEl.textContent = data.name;
+      const icon = meta.querySelector(".file-icon i");
+      const ext = data.name.split(".").pop().toLowerCase();
+      if (["pdf"].includes(ext)) icon.className = "bi bi-file-earmark-pdf";
+      else if (["xlsx", "xls"].includes(ext)) icon.className = "bi bi-file-earmark-spreadsheet";
+      else if (["doc", "docx"].includes(ext)) icon.className = "bi bi-file-earmark-word";
+      else if (["ppt", "pptx"].includes(ext)) icon.className = "bi bi-file-earmark-slides";
+      else icon.className = "bi bi-file-earmark";
+    }
+    const contentBlocks = node.querySelector(".content-blocks");
+    if (contentBlocks && data.content) {
+      data.content.forEach((c) => addContentBlock(contentBlocks, c));
+    }
+  }
+
+  const contentBlocks = node.querySelector(".content-blocks");
+  if (contentBlocks) {
+    node.querySelector(".add-content").addEventListener("click", () => addContentBlock(contentBlocks));
   }
 
   node.querySelector(".remove-item").addEventListener("click", () => node.remove());
@@ -74,6 +208,7 @@ function collectGroup(listId) {
         date: dateField.value.trim(),
         description: el.querySelector(".f-update-desc").value.trim(),
         image: slot ? slot.dataset.image || "" : "",
+        content: collectContentBlocks(el),
       };
     }
     const caption = el.querySelector(".f-caption");
@@ -83,6 +218,7 @@ function collectGroup(listId) {
         caption: caption.value.trim(),
         description: el.querySelector(".f-description").value.trim(),
         image: slot ? slot.dataset.image || "" : "",
+        content: collectContentBlocks(el),
       };
     }
     return {
@@ -109,6 +245,9 @@ function bindAddButtons() {
   );
   document.getElementById("addNote").addEventListener("click", () =>
     addRepeatItem("notes", "notesTpl", "notesList")
+  );
+  document.getElementById("addFile").addEventListener("click", () =>
+    addRepeatItem("files", "filesTpl", "filesList")
   );
 }
 
@@ -150,11 +289,23 @@ function fillBasicInfo(doc) {
     notesToggle.checked = doc.notesEnabled !== false;
     notesToggle.dispatchEvent(new Event("change"));
   }
+  const updatesToggle = document.querySelector("#sec-updates .toggle-input");
+  if (updatesToggle) {
+    updatesToggle.checked = doc.updatesEnabled !== false;
+    updatesToggle.dispatchEvent(new Event("change"));
+  }
 }
 
 function loadForEdit(id) {
   const doc = DocsStore.getById(id);
-  if (!doc) return;
+  if (!doc) {
+    document.getElementById("pageTitle").textContent = "Dokumentasi Tidak Ditemukan";
+    document.querySelector('button[type="submit"]').disabled = true;
+    document.getElementById("docForm").insertAdjacentHTML("afterbegin",
+      `<div class="toast toast--error" style="margin-bottom:16px;">Dokumentasi dengan ID "${id}" tidak ditemukan. Silakan kembali ke dashboard.</div>`
+    );
+    return;
+  }
   editingId = id;
   document.getElementById("pageTitle").textContent = "Edit Documentation";
   document.querySelector('button[type="submit"]').textContent = "Update Documentation";
@@ -164,6 +315,7 @@ function loadForEdit(id) {
   (doc.api || []).forEach((a) => addRepeatItem("api", "apiTpl", "apiList", a));
   (doc.updates || []).forEach((u) => addRepeatItem("updates", "updatesTpl", "updatesList", u));
   (doc.notes || []).forEach((n) => addRepeatItem("notes", "notesTpl", "notesList", n));
+  (doc.files || []).forEach((f) => addRepeatItem("files", "filesTpl", "filesList", f));
 }
 
 function bindScrollSpy() {
@@ -184,6 +336,7 @@ function bindSubmit() {
 
     const apiEnabled = document.querySelector("#sec-api .toggle-input").checked;
     const notesEnabled = document.querySelector("#sec-notes .toggle-input").checked;
+    const updatesEnabled = document.querySelector("#sec-updates .toggle-input").checked;
 
     const payload = {
       project: val("project"),
@@ -198,9 +351,11 @@ function bindSubmit() {
       screenshots: collectGroup("screenshotList"),
       flow: collectGroup("flowList"),
       api: apiEnabled ? collectGroup("apiList") : [],
-      updates: collectGroup("updatesList"),
+      updates: updatesEnabled ? collectGroup("updatesList") : [],
+      files: collectFilesGroup(),
       apiEnabled,
       notesEnabled,
+      updatesEnabled,
     };
 
     if (!payload.project || !payload.feature || !payload.platform) {
@@ -209,7 +364,94 @@ function bindSubmit() {
     }
 
     const saved = editingId ? DocsStore.update(editingId, payload) : DocsStore.create(payload);
+    if (!saved) {
+      alert("Gagal menyimpan dokumentasi. Dokumen dengan ID \"" + editingId + "\" tidak ditemukan.");
+      return;
+    }
     window.location.href = "preview.html?id=" + saved.id;
+  });
+}
+
+function initProjectCombobox() {
+  const input = document.getElementById("project");
+  const menu = document.getElementById("projectMenu");
+  const group = document.getElementById("projectGroup");
+
+  function open() {
+    const val = input.value.trim();
+    const projects = DocsStore.getProjects();
+    const filtered = val
+      ? projects.filter((p) => p.toLowerCase().includes(val.toLowerCase()))
+      : projects;
+    const exactMatch = filtered.some((p) => p.toLowerCase() === val.toLowerCase());
+
+    menu.innerHTML = "";
+    filtered.forEach((p) => {
+      const li = document.createElement("li");
+      li.dataset.value = p;
+      li.textContent = p;
+      menu.appendChild(li);
+    });
+
+    if (val && !exactMatch) {
+      const li = document.createElement("li");
+      li.className = "add-new";
+      li.dataset.value = "";
+      li.textContent = 'Add "' + val + '"';
+      menu.appendChild(li);
+    }
+
+    menu.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  function close() {
+    menu.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+  }
+
+  function selectValue(value) {
+    input.value = value;
+    close();
+  }
+
+  input.addEventListener("focus", open);
+  input.addEventListener("input", open);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      close();
+    }
+    if (e.key === "Enter" && !menu.hidden) {
+      const highlighted = menu.querySelector(".highlighted");
+      if (highlighted) {
+        e.preventDefault();
+        selectValue(highlighted.dataset.value || input.value.trim());
+      }
+    }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const items = [...menu.querySelectorAll("li")];
+      if (!items.length) return;
+      const idx = items.findIndex((li) => li.classList.contains("highlighted"));
+      const next = e.key === "ArrowDown" ? Math.min(idx + 1, items.length - 1) : Math.max(idx - 1, 0);
+      items.forEach((li) => li.classList.remove("highlighted"));
+      items[next].classList.add("highlighted");
+    }
+  });
+
+  menu.addEventListener("click", (e) => {
+    const li = e.target.closest("li");
+    if (!li) return;
+    if (li.classList.contains("add-new")) {
+      selectValue(input.value.trim());
+    } else {
+      selectValue(li.dataset.value);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!group.contains(e.target)) close();
   });
 }
 
@@ -219,9 +461,11 @@ function val(id) {
 
 async function boot() {
   await DocsStore.init();
+  initProjectCombobox();
   bindAddButtons();
   bindSectionToggle("sec-api", ["addApi"]);
   bindSectionToggle("sec-notes", ["addNote"]);
+  bindSectionToggle("sec-updates", ["addUpdates"]);
   bindSubmit();
   bindScrollSpy();
 
@@ -237,6 +481,7 @@ async function boot() {
     addRepeatItem("api", "apiTpl", "apiList");
     addRepeatItem("updates", "updatesTpl", "updatesList");
     addRepeatItem("notes", "notesTpl", "notesList");
+    addRepeatItem("files", "filesTpl", "filesList");
   }
 }
 

@@ -4,6 +4,7 @@ const STATUS_LABEL = {
   accepted: "Accepted",
   declined: "Declined",
   "finish-uat": "Finish UAT",
+  done: "Done",
 };
 
 function renderMediaGroup(containerId, items) {
@@ -19,12 +20,13 @@ function renderMediaGroup(containerId, items) {
     node.querySelector(".media-desc").textContent = item.description || "";
     const frame = node.querySelector(".media-frame");
     if (item.image) {
-      frame.style.backgroundImage = `url(${item.image})`;
-      frame.style.backgroundSize = "contain";
-      frame.style.backgroundPosition = "center";
-      frame.style.backgroundRepeat = "no-repeat";
-      frame.textContent = "";
+      const img = node.querySelector("img");
+      img.src = item.image;
+      img.alt = item.caption || "";
+      img.classList.add("loaded");
+      node.querySelector(".media-frame-placeholder").style.display = "none";
     }
+    renderContentBlocks(node.querySelector(".media-content"), item.content);
     container.appendChild(node);
   });
 }
@@ -61,12 +63,13 @@ function renderUpdatesGroup(items) {
     node.querySelector(".media-desc").textContent = item.description || "";
     const frame = node.querySelector(".media-frame");
     if (item.image) {
-      frame.style.backgroundImage = `url(${item.image})`;
-      frame.style.backgroundSize = "contain";
-      frame.style.backgroundPosition = "center";
-      frame.style.backgroundRepeat = "no-repeat";
-      frame.textContent = "";
+      const img = node.querySelector("img");
+      img.src = item.image;
+      img.alt = item.date || "";
+      img.classList.add("loaded");
+      node.querySelector(".media-frame-placeholder").style.display = "none";
     }
+    renderContentBlocks(node.querySelector(".media-content"), item.content);
     container.appendChild(node);
   });
 }
@@ -74,6 +77,93 @@ function renderUpdatesGroup(items) {
 function formatDate(iso) {
   if (!iso) return "-";
   return new Date(iso).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function renderFilesGroup(items) {
+  const container = document.getElementById("filesBlocks");
+  if (!items || items.length === 0) {
+    container.innerHTML = `<p class="body-text" style="color:var(--muted);">Belum ada file.</p>`;
+    return;
+  }
+  items.forEach((item) => {
+    if (!item.name || !item.data) return;
+    const div = document.createElement("div");
+    div.className = "file-item";
+    const icon = document.createElement("i");
+    const ext = item.name.split(".").pop().toLowerCase();
+    if (["pdf"].includes(ext)) icon.className = "bi bi-file-earmark-pdf";
+    else if (["xlsx", "xls"].includes(ext)) icon.className = "bi bi-file-earmark-spreadsheet";
+    else if (["doc", "docx"].includes(ext)) icon.className = "bi bi-file-earmark-word";
+    else if (["ppt", "pptx"].includes(ext)) icon.className = "bi bi-file-earmark-slides";
+    else icon.className = "bi bi-file-earmark";
+    const a = document.createElement("a");
+    a.href = item.data;
+    a.download = item.name;
+    a.textContent = item.name;
+    div.appendChild(icon);
+    div.appendChild(a);
+    container.appendChild(div);
+  });
+}
+
+function renderContentBlocks(container, content) {
+  if (!content || content.length === 0) return;
+  content.forEach((block) => {
+    if (!block.text) return;
+    let el;
+    switch (block.type) {
+      case "h1":
+        el = document.createElement("div");
+        el.className = "content-h1";
+        el.textContent = block.text;
+        break;
+      case "h2":
+        el = document.createElement("div");
+        el.className = "content-h2";
+        el.textContent = block.text;
+        break;
+      case "h3":
+        el = document.createElement("div");
+        el.className = "content-h3";
+        el.textContent = block.text;
+        break;
+      case "bullet":
+        el = document.createElement("div");
+        el.className = "content-bullet";
+        el.textContent = block.text;
+        break;
+      case "checklist":
+        el = document.createElement("div");
+        el.className = "content-checklist";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.disabled = true;
+        cb.checked = !!block.checked;
+        el.appendChild(cb);
+        el.appendChild(document.createTextNode(block.text));
+        break;
+      case "note":
+        el = document.createElement("div");
+        el.className = "content-note";
+        el.textContent = block.text;
+        break;
+      case "link":
+        el = document.createElement("div");
+        el.className = "content-link";
+        const a = document.createElement("a");
+        a.href = block.url || "#";
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = block.text;
+        el.appendChild(a);
+        break;
+      default:
+        el = document.createElement("div");
+        el.className = "content-text";
+        el.textContent = block.text;
+    }
+    container.appendChild(el);
+  });
 }
 
 async function boot() {
@@ -130,7 +220,16 @@ async function boot() {
 
   renderMediaGroup("screenshotBlocks", doc.screenshots);
   renderMediaGroup("flowBlocks", doc.flow);
-  renderUpdatesGroup(doc.updates);
+
+  const pUpdates = document.getElementById("p-updates");
+  if (doc.updatesEnabled !== false) {
+    renderUpdatesGroup(doc.updates);
+  } else {
+    pUpdates.style.display = "none";
+    document.querySelector('.doc-toc .step[data-n="6"]')?.remove();
+  }
+
+  renderFilesGroup(doc.files);
 }
 
 boot();

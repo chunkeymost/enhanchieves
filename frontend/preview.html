@@ -4,17 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Preview — DocsCMS</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css" />
-<link rel="stylesheet" href="css/preview.css" />
+<link rel="stylesheet" href="../css/base.css" />
+<link rel="stylesheet" href="../css/preview.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
 <body>
 <div class="app-shell">
-  <div id="sidebar-mount" data-active="list"></div>
-
   <main class="main" id="mainContent">
     <p style="color:var(--muted);">Loading…</p>
   </main>
@@ -69,6 +68,12 @@
         <h2>Updates</h2>
         <div id="updatesBlocks"></div>
       </section>
+
+      <section class="doc-section" id="p-files">
+        <div class="eyebrow">Files</div>
+        <h2>Files</h2>
+        <div id="filesBlocks"></div>
+      </section>
     </div>
 
     <nav class="doc-toc">
@@ -78,15 +83,22 @@
       <div class="step" data-n="4"><a href="#p-api">API</a></div>
       <div class="step" data-n="5"><a href="#p-notes">Notes</a></div>
       <div class="step" data-n="6"><a href="#p-updates">Updates</a></div>
+      <div class="step" data-n="7"><a href="#p-files">Files</a></div>
     </nav>
   </div>
 </template>
 
 <template id="mediaBlockTpl">
   <div class="media-block">
-    <div class="media-frame">[ IMAGE ]</div>
-    <div class="media-caption"></div>
-    <div class="media-desc"></div>
+    <div class="media-frame">
+      <img src="" alt="" />
+      <span class="media-frame-placeholder">[ IMAGE ]</span>
+    </div>
+    <div class="media-info">
+      <div class="media-caption"></div>
+      <div class="media-desc"></div>
+      <div class="media-content"></div>
+    </div>
   </div>
 </template>
 
@@ -105,14 +117,19 @@
 
 <template id="updateBlockTpl">
   <div class="media-block">
-    <div class="media-frame">[ IMAGE ]</div>
-    <div class="update-date"></div>
-    <div class="media-desc"></div>
+    <div class="media-frame">
+      <img src="" alt="" />
+      <span class="media-frame-placeholder">[ IMAGE ]</span>
+    </div>
+      <div class="media-info">
+        <div class="update-date"></div>
+        <div class="media-desc"></div>
+        <div class="media-content"></div>
+      </div>
   </div>
 </template>
 
-<script src="js/storage.js"></script>
-<script src="js/sidebar.js"></script>
-<script src="js/preview.js"></script>
+<script src="../js/storage.js"></script>
+<script src="../js/preview.js"></script>
 </body>
 </html>

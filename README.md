@@ -16,14 +16,16 @@
 
 ### Cara Menjalankan
 
-Karena aplikasi menggunakan `fetch()` untuk seed data, jalankan melalui static server:
+Jalankan server bawaan (Node.js, tanpa dependencies tambahan):
 
 ```bash
-# Python
-python3 -m http.server 8000
-
-# Atau pakai VS Code Live Server / extension static server apa pun
+node backend/server.js
+# → http://localhost:3000
 ```
+
+Fitur **Backup Data** otomatis menyimpan file JSON ke folder `data/` ketika server berjalan. Jika server tidak aktif, backup akan fallback ke download browser biasa.
+
+> Alternatif: tetap bisa pakai VS Code Live Server / static server lain, tapi fitur backup otomatis ke folder `data/` tidak akan aktif.
 
 ### Tech Stack
 

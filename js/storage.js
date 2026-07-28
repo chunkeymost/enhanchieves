@@ -17,7 +17,7 @@
  */
 const DocsStore = (() => {
   const LS_KEY = "docscms_v1_docs";
-  const SEED_URL = "data/docs.json";
+  const SEED_URL = "/data/docs.json";
 
   async function ensureSeeded() {
     const existing = localStorage.getItem(LS_KEY);
@@ -60,6 +60,10 @@ const DocsStore = (() => {
     getAll() {
       return readAll();
     },
+    getProjects() {
+      const docs = readAll();
+      return [...new Set(docs.map((d) => d.project).filter(Boolean))].sort();
+    },
     getById(id) {
       return readAll().find((d) => d.id === id) || null;
     },
@@ -70,7 +74,9 @@ const DocsStore = (() => {
         lastUpdate: todayISO(),
         screenshots: [],
         flow: [],
+        files: [],
         api: [],
+        updatesEnabled: true,
         updates: [],
         ...doc,
       };
@@ -92,26 +98,52 @@ const DocsStore = (() => {
     },
     counts() {
       const docs = readAll();
-      const c = { draft: 0, review: 0, accepted: 0, declined: 0, finishUat: 0, total: docs.length };
+      const c = { draft: 0, review: 0, accepted: 0, declined: 0, finishUat: 0, done: 0, total: docs.length };
       docs.forEach((d) => {
         if (d.status === "draft") c.draft++;
         else if (d.status === "review") c.review++;
         else if (d.status === "accepted") c.accepted++;
         else if (d.status === "declined") c.declined++;
         else if (d.status === "finish-uat") c.finishUat++;
+        else if (d.status === "done") c.done++;
       });
       return c;
     },
-    exportJSON() {
-      const blob = new Blob([JSON.stringify(readAll(), null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "docs.json";
-      a.click();
-      URL.revokeObjectURL(url);
+    async exportJSON() {
+      const data = JSON.stringify(readAll(), null, 2);
+      try {
+        const res = await fetch("/api/backup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: data,
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        showToast("Backup data berhasil tersimpan di folder data/", "success");
+      } catch {
+        try {
+          const blob = new Blob([data], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          const now = new Date();
+          const ts = now.getFullYear() +
+            String(now.getMonth() + 1).padStart(2, "0") +
+            String(now.getDate()).padStart(2, "0") + "-" +
+            String(now.getHours()).padStart(2, "0") +
+            String(now.getMinutes()).padStart(2, "0") +
+            String(now.getSeconds()).padStart(2, "0");
+          a.download = `docs-${ts}.json`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 200);
+          showToast("Backup data berhasil (tersimpan di Downloads)", "success");
+        } catch (e) {
+          showToast("Backup data gagal: " + e.message, "error");
+        }
+      }
     },
     async importJSON(file) {
       const text = await file.text();
@@ -124,3 +156,22 @@ const DocsStore = (() => {
     },
   };
 })();
+
+function showToast(message, type) {
+  const container =
+    document.querySelector(".toast-container") ||
+    (() => {
+      const el = document.createElement("div");
+      el.className = "toast-container";
+      document.body.appendChild(el);
+      return el;
+    })();
+  const el = document.createElement("div");
+  el.className = `toast toast--${type}`;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.add("toast--dismissing");
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}

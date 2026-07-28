@@ -3,6 +3,7 @@ const STATUS_LABEL = {
   review: "On Review",
   accepted: "Accepted",
   declined: "Declined",
+  done: "Done",
   "finish-uat": "Finish UAT",
 };
 
@@ -56,7 +57,7 @@ function renderOverview() {
     { key: "accepted", label: "Accepted", value: c.accepted },
     { key: "declined", label: "Declined", value: c.declined },
     { key: "finishUat", label: "Finish UAT", value: c.finishUat },
-    { key: "total", label: "Total Documentation", value: c.total },
+    { key: "total", label: "Total Documentation", value: c.done },
   ];
   document.getElementById("overviewGrid").innerHTML = cards
     .map(
